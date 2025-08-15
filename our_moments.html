@@ -3,30 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Moments</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>Our Moments - Mahavana Residential School</title>
+    <link rel="stylesheet" href="assets/styles.css">
     <script src="assets/include.js" defer></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
         .gallery {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
+            padding: 20px;
         }
         .gallery img {
             max-width: 200px;
             height: auto;
+            border-radius: 8px;
             cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease-in-out;
+            transition: transform 0.2s ease;
         }
         .gallery img:hover {
             transform: scale(1.05);
@@ -34,29 +27,40 @@
     </style>
 </head>
 <body>
+
+    <!-- Header will be included here -->
     <div data-include="header.html"></div>
 
-    <h1>Our Moments</h1>
-    <div class="gallery" id="gallery"></div>
+    <main>
+        <h1 style="text-align:center;">Our Special Moments</h1>
+        <div class="gallery" id="gallery"></div>
+    </main>
 
+    <!-- Footer will be included here -->
     <div data-include="footer.html"></div>
 
     <script>
         const imageFolder = "assets/images/moments/";
-        const jsonFile = imageFolder + "images.json";
 
-        fetch(jsonFile)
-            .then(response => response.json())
+        // Fetch image list from JSON file
+        fetch(imageFolder + "images.json")
+            .then(response => {
+                if (!response.ok) throw new Error("Unable to load images.json");
+                return response.json();
+            })
             .then(images => {
                 const gallery = document.getElementById("gallery");
-                images.forEach(image => {
+                images.forEach(imageName => {
                     const img = document.createElement("img");
-                    img.src = imageFolder + image;
-                    img.alt = "Moment Photo";
+                    img.src = imageFolder + imageName;
+                    img.alt = "Moment";
+                    img.loading = "lazy";
+                    img.onclick = () => window.open(img.src, "_blank");
                     gallery.appendChild(img);
                 });
             })
-            .catch(error => console.error("Error loading images:", error));
+            .catch(err => console.error("Error loading images:", err));
     </script>
+
 </body>
 </html>
