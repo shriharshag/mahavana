@@ -4,92 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Moments</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/include.js" defer></script>
     <style>
-        .gallery-container {
+        .gallery {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 15px;
             padding: 20px;
         }
-        .gallery-container img {
+        .gallery img {
             width: 100%;
             height: auto;
-            cursor: pointer;
             border-radius: 8px;
-            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        /* Lightbox styles */
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
         .lightbox {
             display: none;
             position: fixed;
             z-index: 999;
-            padding: 20px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
         }
         .lightbox img {
-            display: block;
             max-width: 90%;
             max-height: 90%;
-            margin: auto;
+        }
+        .lightbox:target {
+            display: flex;
         }
     </style>
 </head>
 <body>
-    <!-- Header include -->
-    <div id="header"></div>
 
-    <h1 style="text-align:center;">Our Moments</h1>
-    <div class="gallery-container" id="gallery"></div>
+<div data-include="header.html"></div>
 
-    <!-- Lightbox -->
-    <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
-        <img id="lightbox-img" src="">
-    </div>
+<h2 style="text-align:center; margin-top:20px;">Our Moments</h2>
+<div id="gallery" class="gallery"></div>
 
-    <!-- Footer include -->
-    <div id="footer"></div>
+<!-- Lightbox Popup -->
+<div id="lightbox" class="lightbox" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="">
+</div>
 
-    <script>
-        // Load header and footer
-        fetch("header.html").then(res => res.text()).then(data => document.getElementById("header").innerHTML = data);
-        fetch("footer.html").then(res => res.text()).then(data => document.getElementById("footer").innerHTML = data);
+<div data-include="footer.html"></div>
 
-        // Load images.json to create gallery
-        fetch("images/moments/images.json")
-            .then(response => response.json())
-            .then(images => {
-                const gallery = document.getElementById("gallery");
+<script>
+// Auto-scan folder (requires backend for real scanning)
+// For now, assume images named image1.jpg, image2.jpg, etc.
+const totalImages = 9;
+const imageFolder = "images/moments/";
 
-                images.forEach(img => {
-                    const imgElem = document.createElement("img");
-                    imgElem.src = img; // Load full image first
-                    imgElem.loading = "lazy";
+const gallery = document.getElementById("gallery");
 
-                    // Create thumbnail on the fly
-                    imgElem.onload = () => {
-                        const canvas = document.createElement("canvas");
-                        const ctx = canvas.getContext("2d");
-                        canvas.width = 300;
-                        canvas.height = 200;
-                        ctx.drawImage(imgElem, 0, 0, canvas.width, canvas.height);
-                        imgElem.src = canvas.toDataURL("image/jpeg");
-                    };
+for (let i = 1; i <= totalImages; i++) {
+    const fullImage = `${imageFolder}image${i}.jpg`;
 
-                    // On click → show full image
-                    imgElem.addEventListener("click", () => {
-                        document.getElementById("lightbox-img").src = img;
-                        document.getElementById("lightbox").style.display = "block";
-                    });
+    const img = document.createElement("img");
+    img.src = fullImage; // Will be loaded full-size
+    img.loading = "lazy";
 
-                    gallery.appendChild(imgElem);
-                });
-            });
-    </script>
+    img.onclick = () => {
+        document.getElementById("lightbox-img").src = fullImage;
+        document.getElementById("lightbox").style.display = "flex";
+    };
+
+    gallery.appendChild(img);
+}
+</script>
+
 </body>
 </html>
