@@ -1,14 +1,14 @@
 [
-    "images/moments/kidsactivity1.jpg",
-    "images/moments/kidsactivity2.jpg",
-    "images/moments/kidsactivity3.jpg",
-    "images/moments/kidsactivity4.jpg",
-    "images/moments/kidsactivity5.jpg",
-    "images/moments/kidsactivity6.jpg",
-    "images/moments/kidsactivity7.jpg",
-    "images/moments/event1.jpg",
-	"images/moments/event2.jpg",
-	"images/moments/event3.jpg",
-    "images/moments/event4.jpg",
-    "images/moments/event5.jpg"
+    "kidsactivity1.jpg",
+    "kidsactivity2.jpg",
+    "kidsactivity3.jpg",
+    "kidsactivity4.jpg",
+    "kidsactivity5.jpg",
+    "kidsactivity6.jpg",
+    "kidsactivity7.jpg",
+    "event1.jpg",
+	"event2.jpg",
+	"event3.jpg",
+    "event4.jpg",
+    "event5.jpg"
 ]
