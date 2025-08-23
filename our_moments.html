@@ -1,49 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Moments</title>
-    <link rel="stylesheet" href="assets/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Moments - Mahavana Residential School</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    .gallery-container {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      object-fit: cover;
+    }
+
+    .gallery-grid img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Modal / Popup */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.9);
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 80vh;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media screen and (max-width: 600px) {
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+  </style>
 </head>
 <body>
+  <div id="header"></div>
 
-    <!-- Header placeholder -->
-    <div id="header"></div>
+  <main>
+    <section class="gallery-container">
+      <h2>Our Moments</h2>
+      <div id="gallery" class="gallery-grid"></div>
+    </section>
+  </main>
 
-    <main>
-        <section class="gallery">
-            <h2>Our Moments</h2>
-            <div id="gallery"></div>
-        </section>
-    </main>
+  <div id="footer"></div>
 
-    <!-- Footer placeholder -->
-    <div id="footer"></div>
+  <!-- Modal -->
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="fullImage">
+  </div>
 
-    <!-- Load include.js to insert header & footer -->
-    <script src="assets/include.js"></script>
+  <script src="assets/include.js"></script>
+  <script>
+    const imageFolder = "assets/images/moments/";
+    const jsonFile = imageFolder + "images.json";
 
-    <script>
-        const imageFolder = "assets/images/moments/";
-        const jsonFile = imageFolder + "images.json";
+    fetch(jsonFile)
+      .then(response => response.json())
+      .then(images => {
+        const gallery = document.getElementById("gallery");
+        images.forEach(img => {
+          const imgElement = document.createElement("img");
+          imgElement.src = imageFolder + img; 
+          imgElement.alt = "Moment";
+          gallery.appendChild(imgElement);
 
-        fetch(jsonFile)
-            .then(response => response.json())
-            .then(images => {
-                const gallery = document.getElementById("gallery");
-                images.forEach(image => {
-                    const img = document.createElement("img");
-                    img.src = imageFolder + image;
-                    img.alt = "Moment";
-                    img.loading = "lazy";
-                    gallery.appendChild(img);
-                });
-            })
-            .catch(err => {
-                console.error("Error loading images.json:", err);
-            });
-    </script>
+          imgElement.addEventListener("click", () => {
+            document.getElementById("fullImage").src = imageFolder + img;
+            document.getElementById("imageModal").style.display = "block";
+          });
+        });
+      })
+      .catch(err => console.error("Error loading images:", err));
 
+    // Modal close
+    document.querySelector(".close").onclick = function() {
+      document.getElementById("imageModal").style.display = "none";
+    };
+    window.onclick = function(event) {
+      if (event.target == document.getElementById("imageModal")) {
+        document.getElementById("imageModal").style.display = "none";
+      }
+    };
+  </script>
 </body>
 </html>
