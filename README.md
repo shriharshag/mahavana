@@ -1,2 +1,4 @@
 # mahavana
-Mahavana Website
+Mahavana Website : 
+http://mahavanaschool.org/index.html
+https://shriharshag.github.io/mahavana/index.html
